@@ -1,0 +1,1 @@
+select top_longitude, top_latitude from guangming order by id

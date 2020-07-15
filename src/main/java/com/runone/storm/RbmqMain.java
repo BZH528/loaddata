@@ -91,7 +91,7 @@ public class RbmqMain {
                     .persistent()
                     .build();
 
-            builder.setBolt(streamName + "_bolt", new RabbitMQBolt(new LocateTupleToMessage()))
+            builder.setBolt(streamName + "_bolt", new RabbitMQBolt(new LocateTupleToMessage(globalConfig.getProperty("data.type","locate"))))
                     .addConfigurations(sinkConfig.asMap())
                     .shuffleGrouping(preBoltName, streamName);
         });
