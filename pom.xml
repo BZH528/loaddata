@@ -6,7 +6,7 @@
 
     <groupId>com.runone</groupId>
     <artifactId>loaddata</artifactId>
-    <version>1.5</version>
+    <version>1.8</version>
 
     <repositories>
         <repository>
@@ -101,6 +101,17 @@
             <artifactId>test4j.junit</artifactId>
             <version>2.0.7</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.hbase</groupId>
+            <artifactId>hbase-common</artifactId>
+            <version>1.2.0-cdh5.14.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.hbase</groupId>
+            <artifactId>hbase-client</artifactId>
+            <version>1.2.0-cdh5.14.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>

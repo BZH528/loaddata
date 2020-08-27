@@ -29,12 +29,16 @@ public class ReadIniFile {
                 String virtual_host = section.get("mq.sink.virtual_host");
                 String exchange = section.get("mq.sink.exchange");
                 String queuename = section.get("mq.sink.queueName");
-                String compute_distance = section.get("data.highway.compute.distance");
+                String compute_distance = section.getOrDefault("data.highway.compute.distance","0");
                 String sqlfile_path = section.get("data.highway.sqlfile");
                 String streamName = section.getOrDefault("data.highway.sink.stream", key);
+                String extractAll = section.getOrDefault("mq.sink.extractall", "false");
                 List<String> logintitudes = new ArrayList<String>();
                 List<String> latitudes = new ArrayList<String>();
-                MysqlUtils.getHighWayInfoFromMysql(sqlfile_path, logintitudes, latitudes);
+                Boolean eall = Boolean.valueOf(extractAll);
+                if (!eall) {
+                    MysqlUtils.getHighWayInfoFromMysql(sqlfile_path, logintitudes, latitudes);
+                }
                 dataSinkInfo.setHost(host);
                 dataSinkInfo.setUsername(username);
                 dataSinkInfo.setPassword(password);
@@ -46,6 +50,7 @@ public class ReadIniFile {
                 dataSinkInfo.setLongitudes(logintitudes);
                 dataSinkInfo.setLatitudes(latitudes);
                 dataSinkInfo.setSectionName(key);
+                dataSinkInfo.setExtract_all(eall);
                 dataSinks.add(dataSinkInfo);
             });
 
@@ -59,7 +64,6 @@ public class ReadIniFile {
 
         List<DataSinkInfo> dataSinkInfos = readIniFile("conf/datasink.ini");
         System.out.println(dataSinkInfos);
-
 
     }
 

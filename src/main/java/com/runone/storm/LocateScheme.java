@@ -22,6 +22,7 @@ public class LocateScheme implements Scheme {
         String msg = "";
         try {
             msg = new String(byteBuffer.array(), "utf-8");
+            System.out.println("msg:" + msg);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }

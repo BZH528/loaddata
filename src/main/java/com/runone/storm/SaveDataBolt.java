@@ -53,7 +53,7 @@ public class SaveDataBolt extends BaseRichBolt {
     @Override
     public void execute(Tuple tuple) {
         logger.info("the source queuename is:" + this.dataflow.get("mq.spout.queueName"));
-        logger.info("tableType is : " + tableType);
+//        logger.info("tableType is : " + tableType);
         List<Object> values = tuple.getValues();
         List<String> fileds = new ArrayList<>();
 

@@ -1,7 +1,6 @@
 package com.runone.storm;
 
 import com.runone.bean.DataSinkInfo;
-import com.runone.util.LngLonUtil;
 import com.runone.util.LocateUtils;
 import org.apache.storm.task.OutputCollector;
 import org.apache.storm.task.TopologyContext;
@@ -24,6 +23,7 @@ public class LocateDataFilter implements IRichBolt {
 
     private final String[] outputFileds;
 
+
     public LocateDataFilter(List<DataSinkInfo> dataSinkInfos, String[] outputFields) {
         this.dataSinkInfos = dataSinkInfos;
         this.outputFileds = outputFields;
@@ -32,50 +32,30 @@ public class LocateDataFilter implements IRichBolt {
     @Override
     public void prepare(Map map, TopologyContext context, OutputCollector outputCollector) {
         this.outputCollector = outputCollector;
-
-        //从context里面读取配置文件数据，初始化excutor
-//        this.dataSinkInfos = new ArrayList<>();
-//        String dataStr = (String) context.getConf().get("dataSinks");
-//        Gson gson = new Gson();
-//        JsonArray jsonArr = new JsonParser().parse(dataStr).getAsJsonArray();
-//        for (JsonElement jsonElement : jsonArr) {
-//            dataSinkInfos.add(gson.fromJson(jsonElement, DataSinkInfo.class));
-//        }
-
-//        JSONObject jsonObject = (JSONObject) context.getConf().get("dataflow.properties");
-//        String s = jsonObject.get("mq.spout.password");
-
-//        this.dataSinkInfos = RbmqMain.dataSinks;
-
-
         this.logger = LoggerFactory.getLogger(LocateDataFilter.class);
     }
 
     public void execute(Tuple tuple) {
         String longtitude = tuple.getStringByField("Longtitude");
         String latitude = tuple.getStringByField("Latitude");
-        List<Object> fields = tuple.getValues();
 
-        boolean flag = false;
+        List<Object> fields = tuple.getValues();
         Iterator<DataSinkInfo> iterator = dataSinkInfos.iterator();
 
-        //提取高速数据
+        //提取数据,一个dataSinkInfo对象只支持数据一种去向，避免混乱。
         while (iterator.hasNext()) {
             DataSinkInfo datainfo = iterator.next();
             logger.info("to alalyze highway：" + datainfo.getSectionName());
-            if (isInHighWay(longtitude, latitude, datainfo.getLongitudes(), datainfo.getLatitudes(), datainfo.getCompute_distance())) {
-                flag = true;
-                this.logger.info("---------------------------it is in highway-----------------------------");
+
+            if (datainfo.isExtract_all()) {
+                //是否提取所有数据到某个队列。
+                this.outputCollector.emit(datainfo.getStreamName(), fields);
+            } else if (isInHighWay(longtitude, latitude, datainfo.getLongitudes(), datainfo.getLatitudes(), datainfo.getCompute_distance())) {
+                //按照某种规则提取数据。
                 this.outputCollector.emit(datainfo.getStreamName(), fields);
             }
         }
-
-        if (!flag) {
-            this.logger.info("############################it is in not highway#########################");
-        }
-
         this.outputCollector.emit("common", fields);
-
         this.outputCollector.ack(tuple);
     }
 
@@ -89,9 +69,7 @@ public class LocateDataFilter implements IRichBolt {
     }
 
     public void declareOutputFields(OutputFieldsDeclarer outputFieldsDeclarer) {
-//        String[] fields = RbmqMain.getConfigFields();
         String[] fields = this.outputFileds;
-//        Iterator<DataSinkInfo> iterator = RbmqMain.dataSinks.iterator();
         Iterator<DataSinkInfo> iterator = this.dataSinkInfos.iterator();
         while (iterator.hasNext()) {
             DataSinkInfo datainfo = iterator.next();

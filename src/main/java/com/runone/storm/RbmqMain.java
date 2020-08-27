@@ -1,8 +1,6 @@
 package com.runone.storm;
 
-import com.google.gson.Gson;
 import com.runone.bean.DataSinkInfo;
-import com.runone.util.MysqlUtils;
 import com.runone.util.ReadIniFile;
 import com.runone.util.TableType;
 import io.latent.storm.rabbitmq.RabbitMQBolt;
@@ -115,8 +113,6 @@ public class RbmqMain {
         if (needExtract) {
             String filepath = prop.getProperty("data.sink.inifile");
             dataSinks = ReadIniFile.readIniFile(filepath);
-//            Gson gson = new Gson();
-//            conf.put("dataSinks", gson.toJson(dataSinks));
         }
 
         String mq_spout_host = prop.getProperty("mq.spout.host");

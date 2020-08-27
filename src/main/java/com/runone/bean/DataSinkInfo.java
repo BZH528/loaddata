@@ -16,6 +16,17 @@ public class DataSinkInfo implements Serializable {
     private String streamName;
 
     private double compute_distance;
+
+    private boolean extract_all;
+
+    public boolean isExtract_all() {
+        return extract_all;
+    }
+
+    public void setExtract_all(boolean extract_all) {
+        this.extract_all = extract_all;
+    }
+
     private List<String> longitudes;
     private List<String> latitudes;
 

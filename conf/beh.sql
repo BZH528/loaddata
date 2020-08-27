@@ -1,1 +1,1 @@
-select top_longitude,top_latitude from beierhuan_g1508  where right(point_code,3) % 10 = 0
+select top_longitude,top_latitude from beierhuan_g1508  where right(point_code,3) % 10 = 0 order by id

@@ -109,6 +109,7 @@ public class MysqlUtils {
 
     }
 
+    //测试
     public static void main(String[] args) {
         Connection connection = MysqlUtils.getConnection();
         try {
