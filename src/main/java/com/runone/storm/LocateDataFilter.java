@@ -60,6 +60,7 @@ public class LocateDataFilter implements IRichBolt {
     }
 
 
+    //判断是否是在高速路上
     private boolean isInHighWay(String target_longtitude, String target_latitude, List<String> longitudes, List<String> latitudes, double max_distance) {
         return LocateUtils.isInHighWayAccordLocate(target_longtitude, target_latitude, longitudes, latitudes);
     }

@@ -1,6 +1,5 @@
 package com.runone.hive;
 
-import com.mysql.jdbc.StringUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
