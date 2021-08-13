@@ -1,0 +1,2 @@
+# loaddata
+大数据平台实时计算框架用的是storm，利用RabbitMQSpout消费191机器上的数据
